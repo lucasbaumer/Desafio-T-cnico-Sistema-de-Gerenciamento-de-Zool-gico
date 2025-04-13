@@ -1,8 +1,11 @@
-﻿using AnimalCareBackend.Core.Entities;
+﻿using AnimalCareBackend.Application.Converters;
+using AnimalCareBackend.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace AnimalCareBackend.Application.DTOS
@@ -11,6 +14,8 @@ namespace AnimalCareBackend.Application.DTOS
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
+        [JsonConverter(typeof(CustomDateOnlyConverter))]
         public DateTime DateOfBirth { get; set; }
         public string Species { get; set; }
         public string Habitat { get; set; }

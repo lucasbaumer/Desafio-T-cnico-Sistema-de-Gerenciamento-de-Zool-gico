@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnimalCareBackend.Core.Entities
+namespace AnimalCareBackend.Application.DTOS
 {
-    public class Care
+    public class CareWithAnimal
     {
         public Guid Id { get; set; }
         public string CareName { get; set; }
         public string Description { get; set; }
         public string Frequency { get; set; }
-
-        public virtual ICollection<AnimalCare> AnimalCares { get; set; }
-
+        public List<AnimalCareDto> AnimalCares { get; set; }
     }
 }

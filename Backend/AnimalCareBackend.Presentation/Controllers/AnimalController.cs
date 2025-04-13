@@ -40,8 +40,8 @@ namespace AnimalCareBackend.Presentation.Controllers
         {
             try
             {
-                var animalId = await _animalService.RegisterAnimal(animalCreateDto);
-                return CreatedAtAction(nameof(GetAnimalById), new { id = animalId }, animalCreateDto);
+                await _animalService.RegisterAnimal(animalCreateDto);
+                return Ok("Animal foi cadastrado com sucesso!");
             }
             catch (Exception ex)
             {

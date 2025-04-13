@@ -42,7 +42,7 @@ namespace AnimalCareBackend.Infrastructure.Repositories
 
         public async Task<Animal> GetAnimalById(Guid id)
         {
-            return await _context.Animals.FindAsync(id);
+            return await _context.Set<Animal>().FindAsync(id);
         }
 
         public async Task UpdateAnimalAsync(Animal animal)

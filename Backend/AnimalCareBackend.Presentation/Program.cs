@@ -2,7 +2,10 @@ using AnimalCareBackend.Application.Interface;
 using AnimalCareBackend.Application.Service;
 using AnimalCareBackend.Infrastructure.Data;
 using AnimalCareBackend.Infrastructure.Repositories;
+using AnimalCareBackend.Application.Converters;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +22,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAnimalRepository, AnimalRepository>();
 builder.Services.AddScoped<IAnimalService, AnimalService>();
 builder.Services.AddScoped<ICareRepository, CareRepository>();
+builder.Services.AddScoped<ICareService, CareService>();
 
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 var app = builder.Build();
 

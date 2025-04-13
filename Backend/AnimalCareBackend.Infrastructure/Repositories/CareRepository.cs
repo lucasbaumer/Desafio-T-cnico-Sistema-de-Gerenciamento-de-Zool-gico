@@ -36,7 +36,9 @@ namespace AnimalCareBackend.Infrastructure.Repositories
 
         public async Task<IEnumerable<Care>> GetAllCaresAsync()
         {
-            return await _context.Cares.ToListAsync();
+            return await _context.Cares
+                .Include(c => c.AnimalCares)
+                .ToListAsync();
         }
 
         public async Task<Care> GetCareByIdAsync(Guid id)

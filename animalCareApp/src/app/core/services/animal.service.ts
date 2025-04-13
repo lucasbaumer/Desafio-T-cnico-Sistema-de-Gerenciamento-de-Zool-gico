@@ -41,10 +41,11 @@ export class AnimalService {
   }
 
   deleteAnimal(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/animal/${id}`).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/animal/${id}`, { responseType: 'text' as 'json' }).pipe(
       catchError(this.handleError)
     );
   }
+
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';

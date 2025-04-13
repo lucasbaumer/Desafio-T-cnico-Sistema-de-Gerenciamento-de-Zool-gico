@@ -9,7 +9,7 @@
 
 <form #careForm="ngForm" (ngSubmit)="onSubmit()">
   <label>Nome:</label>
-  <input type="text" [(ngModel)]="care.name" name="name" required #name="ngModel">
+  <input type="text" [(ngModel)]="care.careName" name="name" required #name="ngModel">
   <div *ngIf="name.invalid && name.touched" class="error-message">Nome é obrigatório.</div>
 
   <label>Frequência:</label>

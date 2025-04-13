@@ -15,7 +15,7 @@ namespace AnimalCareBackend.Application.DTOS
         public string Description { get; set; } = null!;
 
         [JsonConverter(typeof(CustomDateOnlyConverter))]
-        public DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; } 
         public string Species { get; set; } = null!;
         public string Habitat { get; set; } = null!;
         public string CountryOfOrigin { get; set; } = null!;

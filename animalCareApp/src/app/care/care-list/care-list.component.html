@@ -10,7 +10,7 @@
 <ul class="care-list">
   <li *ngFor="let care of cares">
     <div class="care-item">
-      <h3>{{ care.name }}</h3>
+      <h3>{{ care.careName }}</h3>
       <p><strong>Frequência:</strong> {{ care.frequency }}</p>
       <p><strong>Descrição:</strong> {{ care.description }}</p>
       <p><strong>Animais:</strong> {{ getAnimalNames(care.animalIds) }}</p>

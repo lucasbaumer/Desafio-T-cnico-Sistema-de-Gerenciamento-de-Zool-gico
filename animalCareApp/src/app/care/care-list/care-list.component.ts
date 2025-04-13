@@ -4,6 +4,7 @@ import { AnimalService } from '../../core/services/animal.service';
 import { Router } from '@angular/router';
 import { Care } from '../../core/models/care.model';
 import { Animal } from '../../core/models/animal.model';
+
 @Component({
   selector: 'app-care-list',
   templateUrl: './care-list.component.html',
@@ -28,6 +29,7 @@ export class CareListComponent implements OnInit {
   loadCares(): void {
     this.careService.getAllCares().subscribe({
       next: (data) => {
+        console.log("dados: ", data);
         this.cares = data;
       },
       error: (err) => {
@@ -39,6 +41,7 @@ export class CareListComponent implements OnInit {
   loadAnimals(): void {
     this.animalService.getAllAnimals().subscribe({
       next: (data) => {
+        console.log("dados: ", data);
         this.animals = data;
       },
       error: (err) => {
@@ -48,7 +51,9 @@ export class CareListComponent implements OnInit {
   }
 
   getAnimalNames(ids: string[]): string {
-    const selected = this.animals.filter(animal => ids.includes(animal.id));
+    if (!Array.isArray(ids) || ids.length === 0) return '';
+
+    const selected = this.animals ? this.animals.filter(animal => ids.includes(animal.id)) : [];
     return selected.map(animal => animal.name).join(', ');
   }
 
@@ -56,15 +61,27 @@ export class CareListComponent implements OnInit {
     this.router.navigate(['/care/new']);
   }
 
-  editCare(id: number): void {
+  // Alterar o tipo do id de number para string
+  editCare(id: string): void {  // Alterado para string
     this.router.navigate(['/care/edit', id]);
   }
 
-  deleteCare(id: number): void {
+  // Alterar o tipo do id de number para string
+  deleteCare(id: string): void {
     if (confirm('Tem certeza que deseja excluir este cuidado?')) {
       this.careService.deleteCare(id).subscribe({
-        next: () => this.loadCares(),
-        error: (err) => console.error('Erro ao excluir cuidado', err)
+        next: (response) => {
+          if (response) {
+            this.loadCares();
+          } else {
+            console.error('Erro: Não foi possível excluir o cuidado');
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao excluir cuidado', err);
+          // Exibe a resposta completa do erro
+          console.log('Resposta completa do erro:', err);
+        }
       });
     }
   }

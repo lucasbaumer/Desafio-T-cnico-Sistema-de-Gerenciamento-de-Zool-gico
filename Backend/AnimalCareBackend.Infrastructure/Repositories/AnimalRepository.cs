@@ -53,8 +53,32 @@ namespace AnimalCareBackend.Infrastructure.Repositories
 
         public async Task UpdateAnimalAsync(Animal animal)
         {
-             _context.Animals.Update(animal);
-              await _context.SaveChangesAsync();
+            if (animal.AnimalCares == null || !animal.AnimalCares.Any())
+            {
+                throw new Exception("Nenhum cuidado associado ao animal.");
+            }
+
+            _context.Animals.Update(animal);
+            await _context.SaveChangesAsync();
+        }
+
+
+
+        public async Task<Animal> GetAnimalWithCaresById(Guid id)
+        {
+            return await _context.Animals
+                .Include(a => a.AnimalCares)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public void RemoveAnimalCares(IEnumerable<AnimalCare> animalCares)
+        {
+            _context.AnimalCares.RemoveRange(animalCares);
+        }
+
+        public void AddAnimalCare(AnimalCare animalCare)
+        {
+            _context.AnimalCares.Add(animalCare);
         }
     }
 }

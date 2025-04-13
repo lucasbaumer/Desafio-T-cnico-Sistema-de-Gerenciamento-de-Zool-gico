@@ -1,9 +1,9 @@
 import { Animal } from "./animal.model";
 
 export interface Care {
-  id: number;
-  name: string;
+  id: string;
+  careName: string;
   description: string;
   frequency: string;
-  animalIds: number[]
+  animalIds: string[]
 }

@@ -28,7 +28,7 @@ namespace AnimalCareBackend.Presentation.Controllers
         public async Task<IActionResult> GetAnimalById(Guid id)
         {
             var animal = await _animalService.GetByIdAsync(id);
-            if(animal == null)
+            if (animal == null)
             {
                 return NotFound();
             }
@@ -58,7 +58,7 @@ namespace AnimalCareBackend.Presentation.Controllers
                 var result = await _animalService.UpdateAnimal(id, animalUpdateDto);
                 return result ? Ok("Animal Atualizado com sucesso!") : BadRequest("Erro ao atualizar animal!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest($"Erro: {ex.Message}");
             }

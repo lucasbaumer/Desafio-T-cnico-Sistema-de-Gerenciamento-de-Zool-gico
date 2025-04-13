@@ -14,7 +14,7 @@ namespace AnimalCareBackend.Application.Service
     {
         private readonly IAnimalRepository _animalRepository;
         private readonly ICareRepository _careRepository;
-        
+
         public AnimalService(IAnimalRepository animalRepository, ICareRepository careRepository)
         {
             _animalRepository = animalRepository;
@@ -57,7 +57,7 @@ namespace AnimalCareBackend.Application.Service
         {
             var animal = await _animalRepository.GetAnimalById(id);
 
-            if(animal == null)
+            if (animal == null)
             {
                 return null;
             }
@@ -121,26 +121,42 @@ namespace AnimalCareBackend.Application.Service
 
         public async Task<bool> UpdateAnimal(Guid id, AnimalUpdateDto animalUpdateDto)
         {
-            var animal = await _animalRepository.GetAnimalById(id);
-            if(animal == null)
-            {
+            var animal = await _animalRepository.GetAnimalWithCaresById(id); // Inclui os cuidados
+            if (animal == null)
                 throw new Exception("Animal não foi encontrado");
-            }
 
+            // Atualiza os campos simples
             animal.Name = animalUpdateDto.Name;
             animal.Description = animalUpdateDto.Description;
             animal.Habitat = animalUpdateDto.Habitat;
-            animal.DateOfBirth = animalUpdateDto.BirthDate;
+            animal.DateOfBirth = animalUpdateDto.BirthDate; // Verifique se o campo está sendo mapeado corretamente
             animal.CountryOfOrigin = animalUpdateDto.CountryOfOrigin;
 
-            animal.AnimalCares = animalUpdateDto.CareIds?.Select(careId => new AnimalCare
+            // Limpa a lista atual de cuidados ANTES de adicionar os novos
+            if (animalUpdateDto.CareIds != null)
             {
-                AnimalId = animal.Id,
-                CareId = careId
-            }).ToList() ?? new List<AnimalCare>();
+                animal.AnimalCares.Clear(); // Limpa a lista de cuidados existentes, se houver
 
+                // Se os CareIds não forem nulos ou vazios, adiciona os novos cuidados
+                if (animalUpdateDto.CareIds.Any())
+                {
+                    foreach (var careId in animalUpdateDto.CareIds)
+                    {
+                        var animalCare = new AnimalCare
+                        {
+                            AnimalId = animal.Id,
+                            CareId = careId
+                        };
+                        animal.AnimalCares.Add(animalCare);
+                    }
+                }
+            }
+
+            // Verifique se a lista de cuidados não está vazia, mas sem lançar exceção
+            // O animal pode ter cuidados ou não, e não é obrigatório
             await _animalRepository.UpdateAnimalAsync(animal);
             return true;
         }
+
     }
 }

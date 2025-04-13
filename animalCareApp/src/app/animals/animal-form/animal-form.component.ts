@@ -24,27 +24,31 @@ export class AnimalFormComponent {
   formError: string = '';
   isSuccess: boolean = false;
 
-  constructor(private animalService: AnimalService, private activeRoute: ActivatedRoute, private router: Router) {}
+  constructor(
+    private animalService: AnimalService,
+    private activeRoute: ActivatedRoute,
+    private router: Router
+  ) {}
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     const id = this.activeRoute.snapshot.paramMap.get('id');
-    if(id) {
+    if (id) {
       this.animalService.getAnimalById(id).subscribe({
         next: (data) => {
-          this.animal = data
-          console.log("dados do animal: ",data)
+          this.animal = data;
+          console.log("dados do animal: ", data);
           console.log(this.animal.dateOfBirth);
 
-          if(data.dateOfBirth){
+          if (data.dateOfBirth) {
             const parsedDate = new Date(data.dateOfBirth);
 
-            if(!isNaN(parsedDate.getTime())){
+            if (!isNaN(parsedDate.getTime())) {
               this.animal.dateOfBirth = this.formatDateToInputType(parsedDate);
-            }else{
-              this.formError = 'Data inválida!';
+            } else {
+              this.formError = 'Data de nascimento carregada do servidor é inválida!';
+              console.error('Data de nascimento inválida recebida do servidor:', data.dateOfBirth);
             }
           }
-
         },
         error: (err) => {
           this.formError = 'Erro ao carregar dados do animal!';
@@ -53,22 +57,35 @@ export class AnimalFormComponent {
     }
   }
 
+  // Converte a data para o formato YYYY-MM-DD para input type="date"
   formatDateToInputType(date: Date): string {
-    const year = date.getFullYear().toString().padStart(4, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    if (!isNaN(date.getTime())) {
+      const year = date.getFullYear().toString().padStart(4, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } else {
+      console.error('Data inválida para formatação do input');
+      return '';
+    }
   }
 
-  formatDateToBackend(date: Date): string {
-    const year = date.getFullYear().toString().padStart(4, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  formatDateToBackend(date: string): string {
+    const parsedDate = new Date(date);
+    if (!isNaN(parsedDate.getTime())) {
+      const year = parsedDate.getFullYear().toString().padStart(4, '0');
+      const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(parsedDate.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } else {
+      console.error('Data inválida ao formatar para o backend:', date);
+      return '';
+    }
   }
 
-  getAnimal(id: number) : void {
-    if(id) {
+
+  getAnimal(id: number): void {
+    if (id) {
       this.animalService.getAnimalById(id.toString()).subscribe({
         next: (data: Animal) => {
           this.animal = data;
@@ -84,15 +101,23 @@ export class AnimalFormComponent {
     this.router.navigate(['animals']);
   }
 
+  // Função chamada quando o formulário é enviado
   onSubmit() {
     if (!this.animal.name || !this.animal.description || !this.animal.species || !this.animal.habitat || !this.animal.countryOfOrigin) {
       this.formError = 'Preencha todos os campos obrigatórios!';
       return;
     }
 
-    const birth = new Date(this.animal.dateOfBirth);
-    const today = new Date();
+    // Garantir que a data de nascimento é válida antes de enviar ao backend
+    const birthDateString = this.animal.dateOfBirth;
+    const birth = new Date(birthDateString);
 
+    if (isNaN(birth.getTime())) {
+      this.formError = 'Data de nascimento inválida!';
+      return;
+    }
+
+    const today = new Date();
     if (birth > today) {
       this.formError = 'A data de nascimento não pode ser futura!';
       return;
@@ -103,15 +128,18 @@ export class AnimalFormComponent {
       return;
     }
 
-    // Para o input, garanta que a data esteja no formato yyyy-MM-dd
-    this.animal.dateOfBirth = this.formatDateToInputType(birth);
+    // Formatar a data para o formato 'yyyy-MM-dd' para o backend
+    const formattedDateForBackend = this.formatDateToBackend(birthDateString);
 
-    // Se o backend precisa do formato dd/MM/yyyy, então crie uma variável auxiliar ou converta no momento da chamada de serviço:
-    const animalDataToSend = { ...this.animal, dateOfBirth: this.formatDateToBackend(birth) };
-    console.log(animalDataToSend);
+    const animalDataToSend = {
+      ...this.animal,
+      dateOfBirth: formattedDateForBackend // Passando a data formatada
+    };
+
+    console.log("Dados do animal para enviar:", animalDataToSend);
 
     const request = !this.animal.id ? this.animalService.createAnimal(animalDataToSend)
-    : this.animalService.updateAnimal(this.animal.id, animalDataToSend);
+      : this.animalService.updateAnimal(this.animal.id, animalDataToSend);
 
     request.subscribe({
       next: () => {

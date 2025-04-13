@@ -1,0 +1,45 @@
+<div class="header-container">
+  <h1>Cadastro de Cuidados</h1>
+  <button (click)="goToCreate()" class="back-to-list-btn">Voltar para Listagem</button>
+</div>
+
+<div *ngIf="formError" class="alert">
+  {{ formError }}
+</div>
+
+<form #careForm="ngForm" (ngSubmit)="onSubmit()">
+  <label>Nome:</label>
+  <input type="text" [(ngModel)]="care.name" name="name" required #name="ngModel">
+  <div *ngIf="name.invalid && name.touched" class="error-message">Nome é obrigatório.</div>
+
+  <label>Frequência:</label>
+  <select [(ngModel)]="care.frequency" name="frequency" required #frequency="ngModel">
+    <option value="" disabled>Selecione</option>
+    <option value="Diaria">Diária</option>
+    <option value="Semanal">Semanal</option>
+    <option value="Mensal">Mensal</option>
+  </select>
+  <div *ngIf="frequency.invalid && frequency.touched" class="error-message">Frequência é obrigatória.</div>
+
+  <label>Descrição:</label>
+  <input type="text" [(ngModel)]="care.description" name="description" required #description="ngModel">
+  <div *ngIf="description.invalid && description.touched" class="error-message">Descrição é obrigatória.</div>
+
+  <label>Animais:</label>
+  <div *ngFor="let animal of animals">
+    <label>
+      <input
+        type="checkbox"
+        [(ngModel)]="care.animalIds"
+        [value]="animal.id"
+        (change)="onAnimalSelect($event)"
+        name="animalIds">
+      {{ animal.name }}
+    </label>
+  </div>
+  <div *ngIf="care.animalIds.length === 0 && careForm.touched" class="error-message">
+    Selecione pelo menos um animal.
+  </div>
+
+  <button type="submit">Salvar</button>
+</form>

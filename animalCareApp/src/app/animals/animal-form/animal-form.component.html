@@ -1,0 +1,47 @@
+<div class="header-container">
+  <h1>Cadastro de Animais</h1>
+  <button (click)="goToCreate()" class="back-to-list-btn">Voltar para Listagem</button>
+</div>
+
+<div *ngIf="formError" [ngClass]="{'alert' : true, 'error': !isSuccess, 'success': isSuccess}">
+  {{ formError }}
+</div>
+
+
+<form (ngSubmit)="onSubmit()" #animalForm="ngForm" class="form-grid">
+
+  <div class="form-group">
+    <label>Nome:</label>
+    <input type="text" name="name" [(ngModel)]="animal.name" required>
+  </div>
+
+  <div class="form-group">
+    <label>Espécie:</label>
+    <input type="text" name="species" [(ngModel)]="animal.species" required>
+  </div>
+
+  <div class="form-group">
+    <label>Data de Nascimento:</label>
+    <input type="date" name="birthDate" [(ngModel)]="animal.birthDate" required>
+  </div>
+
+  <div class="form-group">
+    <label>País de Origem:</label>
+    <input type="text" name="countryOfOrigin" [(ngModel)]="animal.countryOfOrigin" required>
+  </div>
+
+  <div class="form-group">
+    <label>Habitat:</label>
+    <input type="text" name="habitat" [(ngModel)]="animal.habitat" required>
+  </div>
+
+  <div class="form-group full-width">
+    <label>Descrição:</label>
+    <textarea name="description" [(ngModel)]="animal.description"></textarea>
+  </div>
+
+  <div class="form-group full-width">
+    <button>Salvar</button>
+  </div>
+
+</form>

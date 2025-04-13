@@ -1,0 +1,28 @@
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.nav-menu button {
+  background-color: #E3F2FD;
+  border: 1px solid #90CAF9;
+  color: #1976D2;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-menu button:hover {
+  background-color: #BBDEFB;
+}
+
+.nav-menu .active {
+  background-color: #1976D2;
+  color: white;
+  font-weight: bold;
+}

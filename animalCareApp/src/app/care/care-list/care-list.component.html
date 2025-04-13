@@ -1,0 +1,21 @@
+<div class="header-container">
+  <h1>Listagem de Cuidados</h1>
+  <button (click)="goToCreate()" class="add-care-btn">Cadastrar Novo Cuidado</button>
+</div>
+
+<div *ngIf="cares.length === 0" class="alert">
+  Nenhum cuidado cadastrado.
+</div>
+
+<ul class="care-list">
+  <li *ngFor="let care of cares">
+    <div class="care-item">
+      <h3>{{ care.name }}</h3>
+      <p><strong>Frequência:</strong> {{ care.frequency }}</p>
+      <p><strong>Descrição:</strong> {{ care.description }}</p>
+      <p><strong>Animais:</strong> {{ getAnimalNames(care.animalIds) }}</p>
+      <button class="edit-btn" (click)="editCare(care.id)">Editar</button>
+      <button class="delete-btn" (click)="deleteCare(care.id)">Excluir</button>
+    </div>
+  </li>
+</ul>

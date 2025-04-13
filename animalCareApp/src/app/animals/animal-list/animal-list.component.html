@@ -1,0 +1,26 @@
+<div class="header-container">
+  <h1>Listagem de Animais</h1>
+  <button (click)="goToCreate()" class="add-animal-btn">Cadastrar Novo Animal</button>
+</div>
+
+<div *ngIf="animais.length > 0; else noAnimals" class="animal-list">
+  <div *ngFor="let animal of animais" class="animal-card">
+    <div class="card-header">
+      <h3>{{ animal.name }}</h3>
+      <span class="species">{{ animal.species }}</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Descrição:</strong> {{ animal.description }}</p>
+      <p><strong>Habitat:</strong> {{ animal.habitat }}</p>
+      <p><strong>Origem:</strong> {{ animal.countryOfOrigin }}</p>
+    </div>
+    <div class="card-footer">
+      <button class="edit-btn" (click)="editAnimal(animal.id)">Editar</button>
+      <button class="delete-btn" (click)="deleteAnimal(animal.id)">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #noAnimals>
+  <p>Nenhum animal encontrado.</p>
+</ng-template>

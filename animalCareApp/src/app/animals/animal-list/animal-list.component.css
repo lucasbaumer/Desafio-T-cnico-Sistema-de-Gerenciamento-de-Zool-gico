@@ -1,0 +1,126 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  margin: 30px auto 10px auto;
+}
+
+.animal-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+h1{
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.animal-card {
+  margin-bottom: 20px;
+  width: 250px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.animal-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card-header .species {
+  display: block;
+  font-size: 1rem;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.card-body {
+  padding: 15px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.card-body p {
+  margin-bottom: 10px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.card-footer button {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-footer .edit-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.card-footer .edit-btn:hover {
+  background-color: #0056b3;
+}
+
+.card-footer .delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.card-footer .delete-btn:hover {
+  background-color: #c82333;
+}
+
+ng-template {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.add-animal-btn{
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border:none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.add-animal-btn:hover{
+  background-color: #218838;
+}

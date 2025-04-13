@@ -4,7 +4,7 @@ export interface Animal{
   id: number;
   name: string;
   description: string;
-  birthDate: Date;
+  dateOfBirth: string;
   species: string;
   habitat: string;
   countryOfOrigin: string;

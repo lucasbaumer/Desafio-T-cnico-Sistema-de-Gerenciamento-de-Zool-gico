@@ -25,87 +25,26 @@ export class CareListComponent implements OnInit {
     this.loadAnimals();
   }
 
-  // loadCares(): void {
-  //   this.careService.getAllCares().subscribe({
-  //     next: (data) => {
-  //       this.cares = data;
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao carregar cuidados', err);
-  //     }
-  //   });
-  // }
-
-  // loadAnimals(): void {
-  //   this.animalService.getAllAnimals().subscribe({
-  //     next: (data) => {
-  //       this.animals = data;
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao carregar animais', err);
-  //     }
-  //   });
-  // }
-
   loadCares(): void {
-    this.cares = [
-      {
-        id: 1,
-        name: 'Cuidados com Alimentação',
-        description: 'Fornecer alimentação balanceada para o animal.',
-        frequency: 'Diária',
-        animalIds: [0, 1],  // Leão e Zebra
+    this.careService.getAllCares().subscribe({
+      next: (data) => {
+        this.cares = data;
       },
-      {
-        id: 2,
-        name: 'Verificação de Saúde',
-        description: 'Verificação regular de saúde, incluindo vacinação.',
-        frequency: 'Mensal',
-        animalIds: [0, 2],  // Leão e Macaco
-      },
-      {
-        id: 3,
-        name: 'Atividade Física',
-        description: 'Estimular a atividade física com exercícios e brincadeiras.',
-        frequency: 'Semanal',
-        animalIds: [1, 2],  // Zebra e Macaco
+      error: (err) => {
+        console.error('Erro ao carregar cuidados', err);
       }
-    ];
+    });
   }
 
   loadAnimals(): void {
-    this.animals = [
-      {
-        id: 0,
-        name: 'Leão',
-        description: 'O leão é o rei da selva.',
-        birthDate: new Date('2015-05-12'),
-        species: 'Panthera leo',
-        habitat: 'Savana Africana',
-        countryOfOrigin: 'África',
-        care: [],
+    this.animalService.getAllAnimals().subscribe({
+      next: (data) => {
+        this.animals = data;
       },
-      {
-        id: 1,
-        name: 'Zebra',
-        description: 'A zebra possui listras.',
-        birthDate: new Date('2019-06-23'),
-        species: 'Zebra albina',
-        habitat: 'Savana Africana',
-        countryOfOrigin: 'África',
-        care: [],
-      },
-      {
-        id: 2,
-        name: 'Macaco',
-        description: 'O macaco mais velho do ambiente.',
-        birthDate: new Date('2014-07-26'),
-        species: 'Macaco prego',
-        habitat: 'Amazônia',
-        countryOfOrigin: 'Brasil',
-        care: [],
+      error: (err) => {
+        console.error('Erro ao carregar animais', err);
       }
-    ];
+    });
   }
 
   getAnimalNames(ids: number[]): string {

@@ -10,70 +10,7 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class AnimalListComponent implements OnInit {
-  animais: Animal[] = [
-    {
-      id: 0,
-      name: 'Leão',  // Nome do animal
-      description: 'O leão é o rei da selva.',  // Descrição
-      birthDate: new Date('2015-05-12'),  // Data de nascimento
-      species: 'Panthera leo',  // Espécie
-      habitat: 'Savana Africana',  // Habitat
-      countryOfOrigin: 'África',  // País de origem
-      care: [],  // Cuidados, pode ser uma lista vazia inicialmente
-    },
-    {
-      id: 1,
-      name: 'zebra',  // Nome do animal
-      description: 'a zebra possui listras.',  // Descrição
-      birthDate: new Date('2019-23-06'),  // Data de nascimento
-      species: 'zebra albina',  // Espécie
-      habitat: 'Savana Africana',  // Habitat
-      countryOfOrigin: 'África',  // País de origem
-      care: [],  // Cuidados, pode ser uma lista vazia inicialmente
-    },
-    {
-      id: 2,
-      name: 'Macaco',  // Nome do animal
-      description: 'o Macaco mais velho do ambiente.',  // Descrição
-      birthDate: new Date('2014-07-26'),  // Data de nascimento
-      species: 'macaco prego',  // Espécie
-      habitat: 'amazonia',  // Habitat
-      countryOfOrigin: 'Brasil',  // País de origem
-      care: [],  // Cuidados, pode ser uma lista vazia inicialmente
-    },
-    {
-      id: 2,
-      name: 'Macaco',  // Nome do animal
-      description: 'o Macaco mais velho do ambiente.',  // Descrição
-      birthDate: new Date('2014-07-26'),  // Data de nascimento
-      species: 'macaco prego',  // Espécie
-      habitat: 'amazonia',  // Habitat
-      countryOfOrigin: 'Brasil',  // País de origem
-      care: [],  // Cuidados, pode ser uma lista vazia inicialmente
-    },
-    {
-      id: 2,
-      name: 'Macaco',  // Nome do animal
-      description: 'o Macaco mais velho do ambiente.',  // Descrição
-      birthDate: new Date('2014-07-26'),  // Data de nascimento
-      species: 'macaco prego',  // Espécie
-      habitat: 'amazonia',  // Habitat
-      countryOfOrigin: 'Brasil',  // País de origem
-      care: [],  // Cuidados, pode ser uma lista vazia inicialmente
-    },
-    {
-      id: 2,
-      name: 'Macaco',  // Nome do animal
-      description: 'o Macaco mais velho do ambiente.',  // Descrição
-      birthDate: new Date('2014-07-26'),  // Data de nascimento
-      species: 'macaco prego',  // Espécie
-      habitat: 'amazonia',  // Habitat
-      countryOfOrigin: 'Brasil',  // País de origem
-      care: [],  // Cuidados, pode ser uma lista vazia inicialmente
-    },
-
-
-  ];
+  animais: Animal[] = [];
 
   constructor(private animalService: AnimalService, private router: Router) {}
 
@@ -97,15 +34,12 @@ export class AnimalListComponent implements OnInit {
   }
 
   editAnimal(id: number): void {
-    this.animalService.getAnimalById(id).subscribe({
-      next: (animal) => {
-        this.router.navigate([`/animal/edit/${id}`]);
-        console.log('Animal para editar:', animal);
-      },
-      error: (err) => {
-        console.error('Erro ao buscar animal para edição', err);
-      }
-    });
+    if(id) {
+      this.router.navigate([`/animal/edit/${id}`]);
+    }
+    else{
+      console.log("ID invalido")
+    }
   }
 
   deleteAnimal(id: number): void {

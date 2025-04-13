@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'animals', pathMatch: 'full' },
   { path: 'animals', component: AnimalListComponent },
   { path: 'animal/new', component: AnimalFormComponent },
-  { path: 'animals/edit/:id', component: AnimalFormComponent },
+  { path: 'animal/edit/:id', component: AnimalFormComponent },
 
   { path: 'care', component: CareListComponent },
   { path: 'care/new', component: CareFormComponent },

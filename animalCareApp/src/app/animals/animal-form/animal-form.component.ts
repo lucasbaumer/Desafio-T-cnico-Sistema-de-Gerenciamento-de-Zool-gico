@@ -27,9 +27,9 @@ export class AnimalFormComponent {
   constructor(private animalService: AnimalService, private activeRoute: ActivatedRoute, private router: Router) {}
 
   ngOnInit() : void {
-    const id = Number(this.activeRoute.snapshot.paramMap.get('id'));
+    const id = this.activeRoute.snapshot.paramMap.get('id');
     if(id) {
-      this.animalService.getAnimalById(+id).subscribe({
+      this.animalService.getAnimalById(id).subscribe({
         next: (data) => {
           this.animal = data
         },
@@ -42,7 +42,7 @@ export class AnimalFormComponent {
 
   getAnimal(id: number) : void {
     if(id) {
-      this.animalService.getAnimalById(id).subscribe({
+      this.animalService.getAnimalById(id.toString()).subscribe({
         next: (data: Animal) => {
           this.animal = data;
         },
@@ -76,7 +76,7 @@ export class AnimalFormComponent {
     }
 
     const request = this.animal.id === 0 ? this.animalService.createAnimal(this.animal)
-    : this.animalService.updateAnimal(this.animal.id, this.animal)
+    : this.animalService.updateAnimal(+this.animal.id, this.animal)
 
     request.subscribe({
       next: () => {

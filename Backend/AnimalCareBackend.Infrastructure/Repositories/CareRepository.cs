@@ -43,7 +43,9 @@ namespace AnimalCareBackend.Infrastructure.Repositories
 
         public async Task<Care> GetCareByIdAsync(Guid id)
         {
-           return await _context.Cares.FindAsync(id);
+            return await _context.Cares
+                 .Include(c => c.AnimalCares)
+                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task UpdateCareAsync(Care care)

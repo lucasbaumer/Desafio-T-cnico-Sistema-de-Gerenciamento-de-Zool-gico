@@ -37,12 +37,18 @@ namespace AnimalCareBackend.Infrastructure.Repositories
 
         public async Task<IEnumerable<Animal>> GetAllAnimalsAsync()
         {
-            return await _context.Animals.ToListAsync();
+            return await _context.Animals
+                .Include(a => a.AnimalCares)
+                .ThenInclude(ac => ac.Care)
+                .ToListAsync();
         }
 
         public async Task<Animal> GetAnimalById(Guid id)
         {
-            return await _context.Set<Animal>().FindAsync(id);
+            return await _context.Animals
+                .Include(a => a.AnimalCares)
+                .ThenInclude(ac => ac.Care)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task UpdateAnimalAsync(Animal animal)

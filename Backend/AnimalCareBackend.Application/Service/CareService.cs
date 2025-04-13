@@ -73,9 +73,29 @@ namespace AnimalCareBackend.Application.Service
             return await _careRepository.GetByIdsAsync(ids);
         }
 
-        public async Task<Care> GetCareByIdAsync(Guid id)
+        public async Task<CareWithAnimal> GetCareByIdAsync(Guid id)
         {
-            return await _careRepository.GetCareByIdAsync(id);
+            var care = await _careRepository.GetCareByIdAsync(id);
+
+            if(care == null)
+            {
+                return null;
+            }
+
+            var careWithAnimal = new CareWithAnimal
+            {
+                Id = care.Id,
+                CareName = care.CareName,
+                Description = care.Description,
+                Frequency = care.Frequency,
+                AnimalCares = care.AnimalCares.Select(AnimalCare => new AnimalCareDto
+                {
+                    AnimalId = AnimalCare.AnimalId,
+                    AnimalName = _animalRepository.GetAnimalById(AnimalCare.AnimalId).Result.Name
+                }).ToList()
+            };
+
+            return careWithAnimal;
         }
 
         public async Task<bool> UpdateCareAsync(Guid id, CareUpdateDto careDto)

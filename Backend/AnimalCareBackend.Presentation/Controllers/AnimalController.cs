@@ -18,9 +18,10 @@ namespace AnimalCareBackend.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Animal>> GetAllAnimals()
+        public async Task<IActionResult> GetAllAnimals()
         {
-            return await _animalService.GetAllAsync();
+            var animals = await _animalService.GetAllAsync();
+            return Ok(animals);
         }
 
         [HttpGet("{id}")]

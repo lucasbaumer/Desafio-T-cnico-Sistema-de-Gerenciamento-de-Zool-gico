@@ -11,7 +11,7 @@ namespace AnimalCareBackend.Application.Interface
     public interface ICareService
     {
         Task<IEnumerable<CareWithAnimal>> GetAllCaresAsync();
-        Task<Care> GetCareByIdAsync(Guid id);
+        Task<CareWithAnimal> GetCareByIdAsync(Guid id);
         Task<Guid> AddCareAsync(CareCreateDto careDto);
         Task<bool> UpdateCareAsync(Guid id, CareUpdateDto careDto);
         Task<bool> DeleteCareAsync(Guid id);

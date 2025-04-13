@@ -27,14 +27,62 @@ namespace AnimalCareBackend.Application.Service
             return true;
         }
 
-        public async Task<IEnumerable<Animal>> GetAllAsync()
+        public async Task<IEnumerable<AnimalWithCare>> GetAllAsync()
         {
-            return await _animalRepository.GetAllAnimalsAsync();
+            var animals = await _animalRepository.GetAllAnimalsAsync();
+            var animalsDto = animals.Select(animal => new AnimalWithCare
+            {
+                Id = animal.Id,
+                Name = animal.Name,
+                Description = animal.Description,
+                DateOfBirth = animal.DateOfBirth,
+                Species = animal.Species,
+                Habitat = animal.Habitat,
+                CountryOfOrigin = animal.CountryOfOrigin,
+                Cares = animal.AnimalCares
+                    .Where(ac => ac.Care != null)
+                    .Select(ac => new CareResponseDto
+                    {
+                        Id = ac.Care.Id,
+                        CareName = ac.Care.CareName,
+                        Description = ac.Care.Description,
+                        Frequency = ac.Care.Frequency
+                    }).ToList()
+            }).ToList();
+
+            return animalsDto;
         }
 
-        public async Task<Animal> GetByIdAsync(Guid id)
+        public async Task<AnimalWithCare> GetByIdAsync(Guid id)
         {
-            return await _animalRepository.GetAnimalById(id);
+            var animal = await _animalRepository.GetAnimalById(id);
+
+            if(animal == null)
+            {
+                return null;
+            }
+
+            var dto = new AnimalWithCare
+            {
+                Id = animal.Id,
+                Name = animal.Name,
+                Description = animal.Description,
+                DateOfBirth = animal.DateOfBirth,
+                Species = animal.Species,
+                Habitat = animal.Habitat,
+                CountryOfOrigin = animal.CountryOfOrigin,
+                Cares = animal.AnimalCares
+                    .Where(ac => ac.Care != null)
+                    .Select(ac => new CareResponseDto
+                    {
+                        Id = ac.Care.Id,
+                        CareName = ac.Care.CareName,
+                        Description = ac.Care.Description,
+                        Frequency = ac.Care.Frequency
+                    }).ToList()
+            };
+
+            return dto;
         }
 
         public async Task<Guid> RegisterAnimal(AnimalCreateDto animalCreateDto)

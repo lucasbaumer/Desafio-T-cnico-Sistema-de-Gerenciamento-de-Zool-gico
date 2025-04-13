@@ -10,8 +10,8 @@ namespace AnimalCareBackend.Application.Interface
 {
     public interface IAnimalService
     {
-        Task<IEnumerable<Animal>> GetAllAsync();
-        Task<Animal> GetByIdAsync(Guid id);
+        Task<IEnumerable<AnimalWithCare>> GetAllAsync();
+        Task<AnimalWithCare> GetByIdAsync(Guid id);
         Task<Guid> RegisterAnimal(AnimalCreateDto animalCreateDto);
         Task<bool> UpdateAnimal(Guid id, AnimalUpdateDto animalUpdateDto);
         Task<bool> DeleteAnimal(Guid id);

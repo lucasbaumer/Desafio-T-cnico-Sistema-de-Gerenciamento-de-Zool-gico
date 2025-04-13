@@ -20,11 +20,11 @@ namespace AnimalCareBackend.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            
-            modelBuilder.Entity<AnimalCare>()
-                .HasKey(ac => ac.CareId);
 
-           
+            modelBuilder.Entity<AnimalCare>()
+                .HasKey(ac => new { ac.AnimalId, ac.CareId });
+
+
             modelBuilder.Entity<AnimalCare>()
                 .HasOne(ac => ac.Animal)
                 .WithMany(a => a.AnimalCares)

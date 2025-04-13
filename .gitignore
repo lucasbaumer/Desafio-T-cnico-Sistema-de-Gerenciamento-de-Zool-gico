@@ -1,0 +1,18 @@
+# Ignora a pasta do Visual Studio
+.vs/
+*.user
+*.suo
+*.vsidx
+*.db
+
+# Ignora binários e pastas comuns do .NET
+**/bin/
+**/obj/
+
+# Ignora arquivos de log e temporários
+*.log
+*.tmp
+*.cache
+
+# Ignora node_modules se tiver frontend em JS/TS
+**/node_modules/

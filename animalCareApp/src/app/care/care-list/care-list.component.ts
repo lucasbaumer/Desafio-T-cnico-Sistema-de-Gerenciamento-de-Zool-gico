@@ -47,7 +47,7 @@ export class CareListComponent implements OnInit {
     });
   }
 
-  getAnimalNames(ids: number[]): string {
+  getAnimalNames(ids: string[]): string {
     const selected = this.animals.filter(animal => ids.includes(animal.id));
     return selected.map(animal => animal.name).join(', ');
   }

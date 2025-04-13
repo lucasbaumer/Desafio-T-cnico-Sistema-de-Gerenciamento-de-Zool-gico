@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Animal } from '../models/animal.model';
-import { environment } from '../../../environment/Environment';
+import { environment } from '../../../Environment/Environment';
 
 @Injectable({
   providedIn: 'root'
@@ -34,13 +34,13 @@ export class AnimalService {
     );
   }
 
-  updateAnimal(id: number, animal: Animal): Observable<Animal> {
-    return this.http.put<Animal>(`${this.apiUrl}/animal/${id}`, animal).pipe(
-      catchError(this.handleError)
-    );
+  updateAnimal(id: string, animal: Animal): Observable<any> {
+    return this.http.put(`${this.apiUrl}/animal/${id}`, animal, {
+      responseType: 'text'
+    });
   }
 
-  deleteAnimal(id: number): Observable<void> {
+  deleteAnimal(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/animal/${id}`).pipe(
       catchError(this.handleError)
     );

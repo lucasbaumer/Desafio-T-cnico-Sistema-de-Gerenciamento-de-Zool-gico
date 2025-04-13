@@ -1,7 +1,7 @@
 import { Care } from "./care.model";
 
 export interface Animal{
-  id: number;
+  id: string;
   name: string;
   description: string;
   dateOfBirth: string;

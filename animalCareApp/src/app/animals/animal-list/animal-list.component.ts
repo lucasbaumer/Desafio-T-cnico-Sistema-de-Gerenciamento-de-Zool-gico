@@ -33,7 +33,7 @@ export class AnimalListComponent implements OnInit {
     });
   }
 
-  editAnimal(id: number): void {
+  editAnimal(id: string): void {
     if(id) {
       this.router.navigate([`/animal/edit/${id}`]);
     }
@@ -42,7 +42,7 @@ export class AnimalListComponent implements OnInit {
     }
   }
 
-  deleteAnimal(id: number): void {
+  deleteAnimal(id: string): void {
     this.animalService.deleteAnimal(id).subscribe({
       next: () => {
         this.animais = this.animais.filter(animal => animal.id !== id);

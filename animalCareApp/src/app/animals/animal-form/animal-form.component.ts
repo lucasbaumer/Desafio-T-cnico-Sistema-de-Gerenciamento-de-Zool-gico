@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AnimalFormComponent {
   animal: Animal = {
-    id: 0,
+    id: '',
     name: '',
     description: '',
     dateOfBirth: '',
@@ -54,17 +54,17 @@ export class AnimalFormComponent {
   }
 
   formatDateToInputType(date: Date): string {
-    const year = date.getFullYear();
+    const year = date.getFullYear().toString().padStart(4, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
 
   formatDateToBackend(date: Date): string {
-    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear().toString().padStart(4, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   getAnimal(id: number) : void {
@@ -89,10 +89,11 @@ export class AnimalFormComponent {
       this.formError = 'Preencha todos os campos obrigatórios!';
       return;
     }
+
     const birth = new Date(this.animal.dateOfBirth);
     const today = new Date();
 
-    if (birth > new Date()) {
+    if (birth > today) {
       this.formError = 'A data de nascimento não pode ser futura!';
       return;
     }
@@ -102,11 +103,15 @@ export class AnimalFormComponent {
       return;
     }
 
-    const formattedDate = this.formatDateToBackend(birth);
-    this.animal.dateOfBirth = formattedDate;
+    // Para o input, garanta que a data esteja no formato yyyy-MM-dd
+    this.animal.dateOfBirth = this.formatDateToInputType(birth);
 
-    const request = this.animal.id === 0 ? this.animalService.createAnimal(this.animal)
-    : this.animalService.updateAnimal(+this.animal.id, this.animal)
+    // Se o backend precisa do formato dd/MM/yyyy, então crie uma variável auxiliar ou converta no momento da chamada de serviço:
+    const animalDataToSend = { ...this.animal, dateOfBirth: this.formatDateToBackend(birth) };
+    console.log(animalDataToSend);
+
+    const request = !this.animal.id ? this.animalService.createAnimal(animalDataToSend)
+    : this.animalService.updateAnimal(this.animal.id, animalDataToSend);
 
     request.subscribe({
       next: () => {
@@ -115,8 +120,9 @@ export class AnimalFormComponent {
         setTimeout(() => this.router.navigate(['/animals']), 3000);
       },
       error: (err) => {
+        console.error('Erro ao salvar animal', err);
         this.formError = 'Erro ao salvar animal, tente novamente!';
       }
-    })
+    });
   }
 }

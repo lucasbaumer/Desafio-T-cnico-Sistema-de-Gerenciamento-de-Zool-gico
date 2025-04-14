@@ -61,12 +61,10 @@ export class CareListComponent implements OnInit {
     this.router.navigate(['/care/new']);
   }
 
-  // Alterar o tipo do id de number para string
-  editCare(id: string): void {  // Alterado para string
+  editCare(id: string): void {
     this.router.navigate(['/care/edit', id]);
   }
 
-  // Alterar o tipo do id de number para string
   deleteCare(id: string): void {
     if (confirm('Tem certeza que deseja excluir este cuidado?')) {
       this.careService.deleteCare(id).subscribe({
@@ -79,7 +77,6 @@ export class CareListComponent implements OnInit {
         },
         error: (err) => {
           console.error('Erro ao excluir cuidado', err);
-          // Exibe a resposta completa do erro
           console.log('Resposta completa do erro:', err);
         }
       });

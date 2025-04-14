@@ -13,7 +13,7 @@ import { Animal } from '../../core/models/animal.model';
 })
 export class CareFormComponent implements OnInit {
   care: Care = {
-    id: '', // A id deve ser do tipo number
+    id: '',
     careName: '',
     description: '',
     frequency: '',
@@ -22,13 +22,13 @@ export class CareFormComponent implements OnInit {
 
   animals: Animal[] = [];
   formError: string = '';
-  isEditMode: boolean = false; // Flag para saber se estamos em modo de edição
+  isEditMode: boolean = false;
 
   constructor(
     private careService: CareService,
     private animalService: AnimalService,
     private router: Router,
-    private route: ActivatedRoute // Para acessar os parâmetros da rota
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -44,17 +44,16 @@ export class CareFormComponent implements OnInit {
     }
   }
 
-  // Método para carregar os dados do cuidado a partir do id
   loadCareData(id: string): void {
     this.careService.getCareById(id).subscribe({
       next: (data) => {
         console.log('Dados do cuidado retornados:', data);
         this.care = {
           id: data.id,
-          careName: data.careName,  // Ajustado para careName
+          careName: data.careName,
           description: data.description,
           frequency: data.frequency,
-          animalIds: data.animalIds || [], // Garantir que animalIds seja sempre um array
+          animalIds: data.animalIds || [],
         };
       },
       error: (err) => {
@@ -79,7 +78,6 @@ export class CareFormComponent implements OnInit {
     }
 
     if (this.isEditMode) {
-      // Passando o id como número
       this.careService.updateCare(this.care.id, this.care).subscribe({
         next: () => {
           this.formError = 'Cuidado atualizado com sucesso!';
@@ -93,7 +91,6 @@ export class CareFormComponent implements OnInit {
         },
       });
     } else {
-      // Se estamos criando um novo cuidado
       this.careService.createCare(this.care).subscribe({
         next: () => {
           this.formError = 'Cuidado cadastrado com sucesso!';

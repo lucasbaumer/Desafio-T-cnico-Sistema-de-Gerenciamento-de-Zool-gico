@@ -71,7 +71,7 @@ Agora, dentro da pasta do front-end, altere a URL do back-end no arquivo environ
 };
 ```
 
-## Funcionalidades Implementadas
+## Funcionalidades Implementadas:
 Gestão de Animais e Cuidados: Telas para listar, cadastrar, atualizar e remover tanto animais quanto cuidados.
 
 Características dos Animais: Cada animal possui informações detalhadas como nome, descrição, data de nascimento, espécie, habitat e país de origem.
@@ -84,7 +84,7 @@ API Restful: O sistema é baseado em uma API REST com backend desenvolvido em C#
 
 Endpoints da API: O backend fornece endpoints GET, POST, PUT e DELETE para manipulação de animais e cuidados.
 
-## Dificuldades Encontradas
+## Dificuldades Encontradas:
 Conversão de Tipos (Date para String): Passei um tempo considerável enfrentando dificuldades com a conversão de tipos de data para string e, apesar de resolver parcialmente, a integração entre front-end e back-end apresentou erros devido a essa questão.
 
 Bugs no Front-end: Enfrentei alguns problemas relacionados à renderização da página, o que gerou inconsistências na exibição dos dados.

@@ -4,9 +4,9 @@ export interface Animal{
   id: string;
   name: string;
   description: string;
-  dateOfBirth: string;
+  birthDate: string | Date;
   species: string;
   habitat: string;
   countryOfOrigin: string;
-  care: Care[];
+  care?: any[];
 }

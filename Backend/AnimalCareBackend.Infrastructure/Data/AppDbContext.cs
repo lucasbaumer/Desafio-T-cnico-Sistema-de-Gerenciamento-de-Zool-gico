@@ -13,6 +13,8 @@ namespace AnimalCareBackend.Infrastructure.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Animal> Animals { get; set; }
+            
+
         public DbSet<Care> Cares { get; set; }
         public DbSet<AnimalCare> AnimalCares { get; set; }
 

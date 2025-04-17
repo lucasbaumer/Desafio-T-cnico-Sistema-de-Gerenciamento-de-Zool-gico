@@ -3,7 +3,11 @@
   <button (click)="goToCreate()" class="add-animal-btn">Cadastrar Novo Animal</button>
 </div>
 
-<div *ngIf="animais.length > 0; else noAnimals" class="animal-list">
+<div *ngIf="showAlert && !loading" class="alert">
+  Nenhum animal encontrado.
+</div>
+
+<div class="animal-list">
   <div *ngFor="let animal of animais" class="animal-card">
     <div class="card-header">
       <h3>{{ animal.name }}</h3>
@@ -21,6 +25,3 @@
   </div>
 </div>
 
-<ng-template #noAnimals>
-  <p>Nenhum animal encontrado.</p>
-</ng-template>

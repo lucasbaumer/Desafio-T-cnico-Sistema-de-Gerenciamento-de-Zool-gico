@@ -102,10 +102,14 @@ h1{
   background-color: #c82333;
 }
 
-ng-template {
+.alert {
+  padding: 12px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 6px;
+  margin: 10px auto;
+  width: 80%;
   text-align: center;
-  font-size: 1.2rem;
-  color: #888;
 }
 
 .add-animal-btn{
@@ -113,7 +117,7 @@ ng-template {
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
-  border:none;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
   text-decoration: none;

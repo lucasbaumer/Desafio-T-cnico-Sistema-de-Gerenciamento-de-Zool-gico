@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class AnimalListComponent implements OnInit {
   animais: Animal[] = [];
+  loading: boolean = true;
+  showAlert: boolean = false;
 
   constructor(private animalService: AnimalService, private router: Router) {}
 
@@ -26,9 +28,17 @@ export class AnimalListComponent implements OnInit {
     this.animalService.getAllAnimals().subscribe({
       next: (data) => {
         this.animais = data;
+        this.loading = false;
+
+        setTimeout(()=> {
+          if(this.animais.length === 0){
+            this.showAlert = true;
+          }
+        }, 500)
       },
       error: (err) => {
         console.error('Erro ao carregar animais', err);
+        this.loading = false;
       }
     });
   }
@@ -43,14 +53,16 @@ export class AnimalListComponent implements OnInit {
   }
 
   deleteAnimal(id: string): void {
-    this.animalService.deleteAnimal(id).subscribe({
-      next: () => {
-        this.animais = this.animais.filter(animal => animal.id !== id);
-        console.log('Animal deletado com sucesso');
-      },
-      error: (err) => {
-        console.error('Erro ao deletar animal', err);
-      }
-    });
+    if(confirm('Você tem certeza que deseja deletar este animal?')){
+      this.animalService.deleteAnimal(id).subscribe({
+        next: () => {
+          this.animais = this.animais.filter(animal => animal.id !== id);
+          console.log('Animal deletado com sucesso');
+        },
+        error: (err) => {
+          console.error('Erro ao deletar animal', err);
+        }
+      });
+    }
   }
 }

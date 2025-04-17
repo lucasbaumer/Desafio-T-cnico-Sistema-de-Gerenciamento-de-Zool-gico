@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Animal } from '../models/animal.model';
@@ -29,14 +29,14 @@ export class AnimalService {
 
 
   createAnimal(animal: Animal): Observable<Animal> {
-    return this.http.post<Animal>((`${this.apiUrl}/animal`), animal).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<Animal>(`${this.apiUrl}/animal`, animal, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
   }
 
-  updateAnimal(id: string, animal: Animal): Observable<any> {
-    return this.http.put(`${this.apiUrl}/animal/${id}`, animal, {
-      responseType: 'text'
+  updateAnimal(id: string, animal: Animal): Observable<Animal> {
+    return this.http.put<Animal>(`${this.apiUrl}/animal/${id}`, animal, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     });
   }
 

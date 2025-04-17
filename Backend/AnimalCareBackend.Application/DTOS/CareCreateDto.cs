@@ -13,6 +13,6 @@ namespace AnimalCareBackend.Application.DTOS
         public string Description { get; set; }
         public string Frequency { get; set; }
 
-        public ICollection<AnimalCareDto> AnimalCares { get; set; }
+        public ICollection<AnimalCareDto>? AnimalCares { get; set; }
     }
 }

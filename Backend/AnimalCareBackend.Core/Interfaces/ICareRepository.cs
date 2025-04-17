@@ -10,7 +10,7 @@ namespace AnimalCareBackend.Infrastructure.Repositories
     public interface ICareRepository
     {
         Task<IEnumerable<Care>> GetAllCaresAsync();
-        Task<Care> GetCareByIdAsync(Guid id);
+        Task<List<Care>> GetCareByIdAsync(List<Guid> id);
         Task AddCareAsync(Care care);
         Task UpdateCareAsync(Care care);
         Task DeleteCare(Guid id);

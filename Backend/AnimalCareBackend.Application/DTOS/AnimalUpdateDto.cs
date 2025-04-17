@@ -19,6 +19,5 @@ namespace AnimalCareBackend.Application.DTOS
         public string Habitat { get; set; } = null!;
         public string CountryOfOrigin { get; set; } = null!;
 
-        public List<Guid>? CareIds { get; set; }
     }
 }

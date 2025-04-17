@@ -75,44 +75,55 @@ namespace AnimalCareBackend.Application.Service
 
         public async Task<CareWithAnimal> GetCareByIdAsync(Guid id)
         {
-            var care = await _careRepository.GetCareByIdAsync(id);
+            var care = await _careRepository.GetCareByIdAsync(new List<Guid> { id });
 
-            if(care == null)
+            if(care == null || !care.Any())
             {
                 return null;
             }
 
             var careWithAnimal = new CareWithAnimal
             {
-                Id = care.Id,
-                CareName = care.CareName,
-                Description = care.Description,
-                Frequency = care.Frequency,
-                AnimalCares = care.AnimalCares.Select(AnimalCare => new AnimalCareDto
-                {
-                    AnimalId = AnimalCare.AnimalId,
-                    AnimalName = _animalRepository.GetAnimalById(AnimalCare.AnimalId).Result.Name
-                }).ToList()
+                Id = care.First().Id,
+                CareName = care.First().CareName,
+                Description = care.First().Description,
+                Frequency = care.First().Frequency,
+                AnimalCares = new List<AnimalCareDto>()
             };
+
+            foreach(var animalCare in care.First().AnimalCares)
+            {
+                var animal = await _animalRepository.GetAnimalById(animalCare.AnimalId);
+                if(animal != null)
+                {
+                    careWithAnimal.AnimalCares.Add(new AnimalCareDto
+                    {
+                        AnimalId = animalCare.AnimalId,
+                        AnimalName = animal.Name,
+                    });
+                }
+            }
 
             return careWithAnimal;
         }
 
         public async Task<bool> UpdateCareAsync(Guid id, CareUpdateDto careDto)
         {
-            var existingCare = await _careRepository.GetCareByIdAsync(id);
+            var existingCare = await _careRepository.GetCareByIdAsync(new List<Guid>{ id });
 
-            if(existingCare == null)
+            if(existingCare == null || !existingCare.Any())
             {
                 throw new Exception("Cuidado não foi encontrado!");
             }
 
-            existingCare.CareName = careDto.careName;
-            existingCare.Description = careDto.Description;
-            existingCare.Frequency = careDto.Frequency;
-            existingCare.AnimalCares = careDto.AnimalCares;
+            var care = existingCare.First();
 
-            await _careRepository.UpdateCareAsync(existingCare);
+            care.CareName = careDto.careName;
+            care.Description = careDto.Description;
+            care.Frequency = careDto.Frequency;
+            care.AnimalCares = careDto.AnimalCares;
+
+            await _careRepository.UpdateCareAsync(care);
             return true;
 
         }

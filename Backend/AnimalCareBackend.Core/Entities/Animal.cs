@@ -15,7 +15,7 @@ namespace AnimalCareBackend.Core.Entities
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public string DateOfBirth { get; set; }
+        public string birthDate { get; set; }
         public string Species { get; set; }
         public string Habitat {  get; set; }
         public string CountryOfOrigin { get; set; }

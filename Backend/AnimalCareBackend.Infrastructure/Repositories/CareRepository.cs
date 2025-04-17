@@ -41,11 +41,12 @@ namespace AnimalCareBackend.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Care> GetCareByIdAsync(Guid id)
+        public async Task<List<Care>> GetCareByIdAsync(List<Guid> id)
         {
             return await _context.Cares
-                 .Include(c => c.AnimalCares)
-                 .FirstOrDefaultAsync(c => c.Id == id);
+                .Where(c => id.Contains(c.Id))
+                .Include(c => c.AnimalCares)
+                .ToListAsync();
         }
 
         public async Task UpdateCareAsync(Care care)

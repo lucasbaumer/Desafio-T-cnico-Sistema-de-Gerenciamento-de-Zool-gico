@@ -53,11 +53,6 @@ namespace AnimalCareBackend.Infrastructure.Repositories
 
         public async Task UpdateAnimalAsync(Animal animal)
         {
-            if (animal.AnimalCares == null || !animal.AnimalCares.Any())
-            {
-                throw new Exception("Nenhum cuidado associado ao animal.");
-            }
-
             _context.Animals.Update(animal);
             await _context.SaveChangesAsync();
         }

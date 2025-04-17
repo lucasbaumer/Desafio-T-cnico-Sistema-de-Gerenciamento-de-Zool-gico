@@ -35,7 +35,7 @@ namespace AnimalCareBackend.Application.Service
                 Id = animal.Id,
                 Name = animal.Name,
                 Description = animal.Description,
-                DateOfBirth = animal.DateOfBirth,
+                birthDate = animal.birthDate,
                 Species = animal.Species,
                 Habitat = animal.Habitat,
                 CountryOfOrigin = animal.CountryOfOrigin,
@@ -67,7 +67,7 @@ namespace AnimalCareBackend.Application.Service
                 Id = animal.Id,
                 Name = animal.Name,
                 Description = animal.Description,
-                DateOfBirth = animal.DateOfBirth,
+                birthDate = animal.birthDate,
                 Species = animal.Species,
                 Habitat = animal.Habitat,
                 CountryOfOrigin = animal.CountryOfOrigin,
@@ -89,30 +89,17 @@ namespace AnimalCareBackend.Application.Service
         {
             var animalId = Guid.NewGuid();
 
-            if (animalCreateDto.careIds != null && animalCreateDto.careIds.Any())
-            {
-                var existingCares = await _careRepository.GetByIdsAsync(animalCreateDto.careIds);
-
-                if (existingCares.Count != animalCreateDto.careIds.Count)
-                {
-                    throw new Exception("Um ou mais cuidados informados não existem.");
-                }
-            }
 
             var animal = new Animal
             {
                 Id = animalId,
                 Name = animalCreateDto.Name,
                 Description = animalCreateDto.Description,
-                DateOfBirth = animalCreateDto.DateOfBirth,
+                birthDate = animalCreateDto.birthDate,
                 Species = animalCreateDto.Species,
                 Habitat = animalCreateDto.Habitat,
                 CountryOfOrigin = animalCreateDto.CountryOfOrigin,
-                AnimalCares = animalCreateDto.careIds?.Select(careId => new AnimalCare
-                {
-                    AnimalId = animalId,
-                    CareId = careId
-                }).ToList() ?? new List<AnimalCare>()
+
             };
 
             await _animalRepository.AddAnimalAsync(animal);
@@ -125,30 +112,12 @@ namespace AnimalCareBackend.Application.Service
             if (animal == null)
                 throw new Exception("Animal não foi encontrado");
 
-            // Atualiza os campos simples
             animal.Name = animalUpdateDto.Name;
             animal.Description = animalUpdateDto.Description;
             animal.Habitat = animalUpdateDto.Habitat;
-            animal.DateOfBirth = animalUpdateDto.BirthDate;
+            animal.birthDate = animalUpdateDto.BirthDate;
             animal.CountryOfOrigin = animalUpdateDto.CountryOfOrigin;
 
-            if (animalUpdateDto.CareIds != null)
-            {
-                animal.AnimalCares.Clear();
-
-                if (animalUpdateDto.CareIds.Any())
-                {
-                    foreach (var careId in animalUpdateDto.CareIds)
-                    {
-                        var animalCare = new AnimalCare
-                        {
-                            AnimalId = animal.Id,
-                            CareId = careId
-                        };
-                        animal.AnimalCares.Add(animalCare);
-                    }
-                }
-            }
             await _animalRepository.UpdateAnimalAsync(animal);
             return true;
         }

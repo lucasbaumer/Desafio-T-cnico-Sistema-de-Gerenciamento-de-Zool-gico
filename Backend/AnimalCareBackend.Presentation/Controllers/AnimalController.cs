@@ -1,4 +1,5 @@
-﻿using AnimalCareBackend.Application.DTOS;
+﻿
+using AnimalCareBackend.Application.DTOS;
 using AnimalCareBackend.Application.Interface;
 using AnimalCareBackend.Core.Entities;
 using AnimalCareBackend.Infrastructure.Repositories;
@@ -42,11 +43,11 @@ namespace AnimalCareBackend.Presentation.Controllers
             try
             {
                 await _animalService.RegisterAnimal(animalCreateDto);
-                return Ok("Animal foi cadastrado com sucesso!");
+                return Ok(new { Message = "Animal foi cadastrado com sucesso!"});
             }
             catch (Exception ex)
             {
-                return BadRequest($"Erro ao cadastrar o animal: {ex.Message}");
+                return BadRequest(new { Message = $"Erro ao cadastrar o animal: {ex.Message}" });
             }
         }
 
@@ -56,11 +57,11 @@ namespace AnimalCareBackend.Presentation.Controllers
             try
             {
                 var result = await _animalService.UpdateAnimal(id, animalUpdateDto);
-                return result ? Ok("Animal Atualizado com sucesso!") : BadRequest("Erro ao atualizar animal!");
+                return result ? Ok(new { Message = "Animal foi ataulizado com sucesso!" }) : BadRequest(new { Message = "Erro ao ataulizar o animal" });
             }
             catch (Exception ex)
             {
-                return BadRequest($"Erro: {ex.Message}");
+                return BadRequest(new { Message = $"Erro: {ex.Message}" });
             }
         }
 

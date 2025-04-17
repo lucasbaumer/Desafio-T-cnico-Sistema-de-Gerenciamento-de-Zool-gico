@@ -32,7 +32,14 @@
       <h3>{{ care.careName }}</h3>
       <p><strong>Frequência:</strong> {{ care.frequency }}</p>
       <p><strong>Descrição:</strong> {{ care.description }}</p>
-      <p><strong>Animais:</strong> {{ getAnimalNames(care.animalCares || []) }}</p>
+      <p><strong>Animais:</strong>
+        <span *ngIf="(care.animalCares || []).length > 0">
+          {{ getAnimalNames(care.animalCares || []) }}
+        </span>
+        <span *ngIf="(care.animalCares || []).length === 0">
+          Nenhum animal associado
+        </span>
+      </p>
       <button class="edit-btn" (click)="editCare(care.id)">Editar</button>
       <button class="delete-btn" (click)="deleteCare(care.id)">Excluir</button>
     </div>

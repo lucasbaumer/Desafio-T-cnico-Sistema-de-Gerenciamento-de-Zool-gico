@@ -13,7 +13,7 @@
       <h3>{{ care.careName }}</h3>
       <p><strong>Frequência:</strong> {{ care.frequency }}</p>
       <p><strong>Descrição:</strong> {{ care.description }}</p>
-      <p><strong>Animais:</strong> {{ getAnimalNames(care.animalIds) }}</p>
+      <p><strong>Animais:</strong> {{ getAnimalNames(care.animalCares || []) }}</p>
       <button class="edit-btn" (click)="editCare(care.id)">Editar</button>
       <button class="delete-btn" (click)="deleteCare(care.id)">Excluir</button>
     </div>

@@ -4,7 +4,6 @@ import { AnimalService } from '../../core/services/animal.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Care } from '../../core/models/care.model';
 import { Animal } from '../../core/models/animal.model';
-import { arrRemove } from 'rxjs/internal/util/arrRemove';
 
 @Component({
   selector: 'app-care-form',
@@ -13,11 +12,12 @@ import { arrRemove } from 'rxjs/internal/util/arrRemove';
   styleUrls: ['./care-form.component.css'],
 })
 export class CareFormComponent implements OnInit {
-  care: Care = {
+  care: Care & { animalIds: string[] } = {
     id: '',
     careName: '',
     description: '',
     frequency: '',
+    animalCares: [],
     animalIds: [],
   };
 
@@ -36,8 +36,7 @@ export class CareFormComponent implements OnInit {
   ngOnInit(): void {
     this.animalService.getAllAnimals().subscribe({
       next: (data) => {
-        this.animals = data,
-        console.log("animais retornados: ", data)
+        this.animals = data;
       },
       error: (err) => console.error('Erro ao carregar animais!', err),
     });
@@ -52,13 +51,14 @@ export class CareFormComponent implements OnInit {
   loadCareData(id: string): void {
     this.careService.getCareById(id).subscribe({
       next: (data) => {
-        console.log('Dados do cuidado retornados:', data);
+
         this.care = {
           id: data.id,
           careName: data.careName,
           description: data.description,
           frequency: data.frequency,
-          animalIds: Array.isArray(data.animalIds) ? data.animalIds : [],
+          animalCares: data.animalCares,
+          animalIds: data.animalCares?.map((ac: any) => ac.animalId) || [],
         };
       },
       error: (err) => {
@@ -67,6 +67,7 @@ export class CareFormComponent implements OnInit {
       },
     });
   }
+
   goToCreate(): void {
     this.router.navigate(['/care']);
   }
@@ -74,17 +75,12 @@ export class CareFormComponent implements OnInit {
   onSubmit(): void {
     this.formSubmitted = true;
 
-    console.log('Dados do formulário:', this.care);
-
-    if(!Array.isArray(this.care.animalIds) || this.care.animalIds.length === 0) {
-      this.formError = 'Por favor, selecione pelo menos um animal.';
-      return;
-    }
-
     if (
       !this.care.careName ||
       !this.care.description ||
-      !this.care.frequency
+      !this.care.frequency ||
+      !Array.isArray(this.care.animalIds) ||
+      this.care.animalIds.length === 0
     ) {
       this.formError = 'Por favor, preencha todos os campos obrigatórios e selecione pelo menos um animal.';
       return;
@@ -94,17 +90,15 @@ export class CareFormComponent implements OnInit {
       careName: this.care.careName,
       description: this.care.description,
       frequency: String(this.care.frequency),
-    }
+    };
 
-    if(this.isEditMode){
-      careToSend.AnimalIds = this.care.animalIds;
-    }
-    else{
-      careToSend.animalCares = this.care.animalIds.map(id => ({ animalId: id }));
+    if (this.isEditMode) {
+      careToSend.animalIds = this.care.animalIds;
+    } else {
+      careToSend.animalCares = this.care.animalIds.map((id) => ({ animalId: id }));
     }
 
     if (this.isEditMode) {
-      console.log("enviando para edição:", careToSend  )
       this.careService.updateCare(this.care.id, careToSend).subscribe({
         next: () => {
           this.formError = 'Cuidado atualizado com sucesso!';
@@ -118,7 +112,6 @@ export class CareFormComponent implements OnInit {
         },
       });
     } else {
-      console.log("enviando pra criação:", careToSend)
       this.careService.createCare(careToSend).subscribe({
         next: () => {
           this.formError = 'Cuidado cadastrado com sucesso!';
@@ -150,6 +143,5 @@ export class CareFormComponent implements OnInit {
       this.care.animalIds = this.care.animalIds.filter((animalId) => animalId !== id);
     }
 
-    console.log("Animais selecionados: ", this.care.animalIds);
   }
 }

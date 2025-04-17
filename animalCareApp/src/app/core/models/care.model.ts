@@ -5,5 +5,5 @@ export interface Care {
   careName: string;
   description: string;
   frequency: string;
-  animalIds: string[]
+  animalCares?: { animalId: string }[];
 }

@@ -50,7 +50,6 @@ export class CareListComponent implements OnInit {
     this.animalService.getAllAnimals().subscribe({
       next: (data) => {
         this.animals = data;
-        console.log("Animais carregados:", this.animals);
       },
       error: (err) => {
         console.error('Erro ao carregar animais', err);
@@ -58,11 +57,12 @@ export class CareListComponent implements OnInit {
     });
   }
 
-  getAnimalNames(ids: string[]): string {
-    if (!Array.isArray(ids) || ids.length === 0) return '';
-
-    const selected = this.animals ? this.animals.filter(animal => ids.includes(animal.id)) : [];
-    return selected.map(animal => animal.name).join(', ');
+  getAnimalNames(animalCares: { animalId: string }[]): string {
+    const ids = animalCares?.map(ac => ac.animalId) || [];
+    const names = this.animals
+      .filter(animal => ids.includes(animal.id))
+      .map(animal => animal.name);
+    return names.join(', ');
   }
 
   goToCreate(): void {

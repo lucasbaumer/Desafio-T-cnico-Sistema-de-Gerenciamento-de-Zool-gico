@@ -7,6 +7,14 @@
   Nenhum animal encontrado.
 </div>
 
+<div *ngIf="formError" class="alert error-alert">
+  {{ formError }}
+</div>
+
+<div *ngIf="successMessage" class="alert success-alert">
+  {{ successMessage }}
+</div>
+
 <div class="modal-overlay" *ngIf="showDeleteModal">
   <div class="modal">
     <h2>Confirmar Exclusão</h2>

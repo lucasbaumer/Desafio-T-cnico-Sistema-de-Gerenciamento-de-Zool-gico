@@ -16,6 +16,9 @@ export class AnimalListComponent implements OnInit {
   showDeleteModal = false;
   animalIdToDelete: string | null = null;
 
+  formError: string = '';
+  successMessage: string = '';
+
   constructor(private animalService: AnimalService, private router: Router) {}
 
   ngOnInit(): void {
@@ -55,18 +58,24 @@ export class AnimalListComponent implements OnInit {
   }
 
   confirmDelete(): void {
+    this.formError = '';
+    this.successMessage = '';
     if (this.animalIdToDelete) {
       this.animalService.deleteAnimal(this.animalIdToDelete).subscribe({
         next: () => {
           this.animais = this.animais.filter(animal => animal.id !== this.animalIdToDelete);
           this.showDeleteModal = false;
           this.animalIdToDelete = null;
-          console.log('Animal deletado com sucesso');
+          this.successMessage = 'Animal deletado com sucesso!'
+          setTimeout(() => this.successMessage = '', 2000);
+
         },
         error: (err) => {
-          console.error('Erro ao deletar animal', err);
           this.showDeleteModal = false;
           this.animalIdToDelete = null;
+          console.error('Erro ao deletar animal', err);
+          this.formError = 'Erro ao deletar animal!';
+          setTimeout(() => this.formError = '', 2000);
         }
       });
     }

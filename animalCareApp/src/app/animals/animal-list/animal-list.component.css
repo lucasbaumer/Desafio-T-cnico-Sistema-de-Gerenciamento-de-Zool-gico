@@ -186,3 +186,24 @@ h1{
   background-color: #0056b3
 }
 
+.alert {
+  margin: 10px auto;
+  width: 50%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error-alert {
+  background-color: #ffe5e5;
+  color: #a10000;
+  border: 1px solid #ffb3b3;
+}
+
+.success-alert {
+  background-color: #e6ffed;
+  color: #007d4f;
+  border: 1px solid #8affc1;
+}

@@ -16,6 +16,8 @@ export class CareListComponent implements OnInit {
   animals: Animal[] = [];
   loading: boolean = true;
   showAlert: boolean = false;
+  showDeleteModal = false;
+  careIdToDelete: string | null = null;
 
   constructor(
     private careService: CareService,
@@ -73,14 +75,18 @@ export class CareListComponent implements OnInit {
     this.router.navigate(['/care/edit', id]);
   }
 
-  deleteCare(id: string): void {
-    if (confirm('Tem certeza que deseja excluir este cuidado?')) {
-      this.careService.deleteCare(id).subscribe({
+  confirmDelete(): void {
+    if(this.careIdToDelete){
+      this.careService.deleteCare(this.careIdToDelete).subscribe({
         next: (response) => {
           if (response) {
             this.loadCares();
+            this.showDeleteModal = false;
+            this.careIdToDelete = null;
           } else {
             console.error('Erro: Não foi possível excluir o cuidado');
+            this.showDeleteModal = false;
+            this.careIdToDelete = null;
           }
         },
         error: (err) => {
@@ -89,5 +95,15 @@ export class CareListComponent implements OnInit {
         }
       });
     }
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.careIdToDelete = null;
+  }
+
+  deleteCare(id: string): void {
+    this.showDeleteModal = true;
+    this.careIdToDelete = id;
   }
 }

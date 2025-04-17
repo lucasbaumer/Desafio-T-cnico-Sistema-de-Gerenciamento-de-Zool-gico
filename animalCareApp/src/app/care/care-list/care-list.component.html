@@ -7,6 +7,17 @@
   Nenhum cuidado cadastrado.
 </div>
 
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal">
+    <h2>Confirmar Exclusão</h2>
+    <p>Tem certeza que deseja excluir este cuidado?</p>
+    <div class="modal-actions">
+      <button class="confirm-btn" (click)="confirmDelete()">Excluir</button>
+      <button class="cancel-btn" (click)="cancelDelete()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <ul class="care-list">
   <li *ngFor="let care of cares">
     <div class="care-item">

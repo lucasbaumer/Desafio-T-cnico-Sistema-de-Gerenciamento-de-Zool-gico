@@ -7,6 +7,17 @@
   Nenhum animal encontrado.
 </div>
 
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal">
+    <h2>Confirmar Exclusão</h2>
+    <p>Tem certeza que deseja excluir este animal?</p>
+    <div class="modal-actions">
+      <button class="confirm-btn" (click)="confirmDelete()">Excluir</button>
+      <button class="cancel-btn" (click)="cancelDelete()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div class="animal-list">
   <div *ngFor="let animal of animais" class="animal-card">
     <div class="card-header">

@@ -13,6 +13,8 @@ export class AnimalListComponent implements OnInit {
   animais: Animal[] = [];
   loading: boolean = true;
   showAlert: boolean = false;
+  showDeleteModal = false;
+  animalIdToDelete: string | null = null;
 
   constructor(private animalService: AnimalService, private router: Router) {}
 
@@ -52,17 +54,31 @@ export class AnimalListComponent implements OnInit {
     }
   }
 
-  deleteAnimal(id: string): void {
-    if(confirm('Você tem certeza que deseja deletar este animal?')){
-      this.animalService.deleteAnimal(id).subscribe({
+  confirmDelete(): void {
+    if (this.animalIdToDelete) {
+      this.animalService.deleteAnimal(this.animalIdToDelete).subscribe({
         next: () => {
-          this.animais = this.animais.filter(animal => animal.id !== id);
+          this.animais = this.animais.filter(animal => animal.id !== this.animalIdToDelete);
+          this.showDeleteModal = false;
+          this.animalIdToDelete = null;
           console.log('Animal deletado com sucesso');
         },
         error: (err) => {
           console.error('Erro ao deletar animal', err);
+          this.showDeleteModal = false;
+          this.animalIdToDelete = null;
         }
       });
     }
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.animalIdToDelete = null;
+  }
+
+  deleteAnimal(id: string): void {
+    this.showDeleteModal = true;
+    this.animalIdToDelete = id;
   }
 }

@@ -9,10 +9,10 @@ namespace AnimalCareBackend.Application.DTOS
 {
     public class CareUpdateDto
     {
-        public string careName { get; set; }
+        public string CareName { get; set; }
         public string Description { get; set; }
         public string Frequency { get; set; }
 
-        public ICollection<AnimalCare>? AnimalCares { get; set; }
+        public string[] AnimalIds { get; set; }
     }
 }

@@ -57,8 +57,6 @@ namespace AnimalCareBackend.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-
-
         public async Task<Animal> GetAnimalWithCaresById(Guid id)
         {
             return await _context.Animals

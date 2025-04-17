@@ -3,7 +3,7 @@
   <button (click)="goToCreate()" class="add-care-btn">Cadastrar Novo Cuidado</button>
 </div>
 
-<div *ngIf="cares.length === 0" class="alert">
+<div *ngIf="showAlert && !loading" class="alert">
   Nenhum cuidado cadastrado.
 </div>
 

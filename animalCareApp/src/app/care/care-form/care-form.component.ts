@@ -4,6 +4,7 @@ import { AnimalService } from '../../core/services/animal.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Care } from '../../core/models/care.model';
 import { Animal } from '../../core/models/animal.model';
+import { arrRemove } from 'rxjs/internal/util/arrRemove';
 
 @Component({
   selector: 'app-care-form',
@@ -23,6 +24,7 @@ export class CareFormComponent implements OnInit {
   animals: Animal[] = [];
   formError: string = '';
   isEditMode: boolean = false;
+  formSubmitted: boolean = false;
 
   constructor(
     private careService: CareService,
@@ -33,7 +35,10 @@ export class CareFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.animalService.getAllAnimals().subscribe({
-      next: (data) => this.animals = data,
+      next: (data) => {
+        this.animals = data,
+        console.log("animais retornados: ", data)
+      },
       error: (err) => console.error('Erro ao carregar animais!', err),
     });
 
@@ -53,7 +58,7 @@ export class CareFormComponent implements OnInit {
           careName: data.careName,
           description: data.description,
           frequency: data.frequency,
-          animalIds: data.animalIds || [],
+          animalIds: Array.isArray(data.animalIds) ? data.animalIds : [],
         };
       },
       error: (err) => {
@@ -67,18 +72,40 @@ export class CareFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.formSubmitted = true;
+
+    console.log('Dados do formulário:', this.care);
+
+    if(!Array.isArray(this.care.animalIds) || this.care.animalIds.length === 0) {
+      this.formError = 'Por favor, selecione pelo menos um animal.';
+      return;
+    }
+
     if (
       !this.care.careName ||
       !this.care.description ||
-      !this.care.frequency ||
-      this.care.animalIds.length === 0
+      !this.care.frequency
     ) {
       this.formError = 'Por favor, preencha todos os campos obrigatórios e selecione pelo menos um animal.';
       return;
     }
 
+    let careToSend: any = {
+      careName: this.care.careName,
+      description: this.care.description,
+      frequency: String(this.care.frequency),
+    }
+
+    if(this.isEditMode){
+      careToSend.AnimalIds = this.care.animalIds;
+    }
+    else{
+      careToSend.animalCares = this.care.animalIds.map(id => ({ animalId: id }));
+    }
+
     if (this.isEditMode) {
-      this.careService.updateCare(this.care.id, this.care).subscribe({
+      console.log("enviando para edição:", careToSend  )
+      this.careService.updateCare(this.care.id, careToSend).subscribe({
         next: () => {
           this.formError = 'Cuidado atualizado com sucesso!';
           setTimeout(() => {
@@ -91,7 +118,8 @@ export class CareFormComponent implements OnInit {
         },
       });
     } else {
-      this.careService.createCare(this.care).subscribe({
+      console.log("enviando pra criação:", careToSend)
+      this.careService.createCare(careToSend).subscribe({
         next: () => {
           this.formError = 'Cuidado cadastrado com sucesso!';
           setTimeout(() => {
@@ -106,12 +134,22 @@ export class CareFormComponent implements OnInit {
     }
   }
 
-  onAnimalSelect(event: any): void {
-    const id = event.target.value;
-    if (event.target.checked) {
-      this.care.animalIds.push(id);
+  onAnimalSelect(id: string, event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const isChecked = target.checked;
+
+    if (!Array.isArray(this.care.animalIds)) {
+      this.care.animalIds = [];
+    }
+
+    if (isChecked) {
+      if (!this.care.animalIds.includes(id)) {
+        this.care.animalIds.push(id);
+      }
     } else {
       this.care.animalIds = this.care.animalIds.filter((animalId) => animalId !== id);
     }
+
+    console.log("Animais selecionados: ", this.care.animalIds);
   }
 }

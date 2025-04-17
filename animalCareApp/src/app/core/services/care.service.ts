@@ -24,7 +24,7 @@ export class CareService{
     return this.http.post<Care>(`${this.apiUrl}/care`, care);
   }
 
-  updateCare(id: string, care: Care): Observable<Care> {
+  updateCare(id: string, care: any): Observable<any> {
     return this.http.put<Care>(`${this.apiUrl}/care/${id}`, care);
   }
 

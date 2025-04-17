@@ -29,13 +29,15 @@ namespace AnimalCareBackend.Infrastructure.Data
 
             modelBuilder.Entity<AnimalCare>()
                 .HasOne(ac => ac.Animal)
-                .WithMany(a => a.AnimalCares)
-                .HasForeignKey(ac => ac.AnimalId);
+                .WithMany()
+                .HasForeignKey(ac => ac.AnimalId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AnimalCare>()
                 .HasOne(ac => ac.Care)
-                .WithMany(c => c.AnimalCares)
-                .HasForeignKey(ac => ac.CareId);
+                .WithMany()
+                .HasForeignKey(ac => ac.CareId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

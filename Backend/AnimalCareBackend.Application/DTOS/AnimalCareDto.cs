@@ -8,7 +8,6 @@ namespace AnimalCareBackend.Application.DTOS
 {
     public class AnimalCareDto
     {
-        public Guid AnimalId { get; set; }
-        public string AnimalName { get; set; }
+        public string AnimalId { get; set; }
     }
 }

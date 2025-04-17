@@ -11,9 +11,9 @@ namespace AnimalCareBackend.Core.Entities
     {
         [Key]
         public Guid AnimalId { get; set; }
-        public Animal Animal { get; set; }
+        public virtual Animal Animal { get; set; }
 
         public Guid CareId { get; set; }
-        public Care Care { get; set; }
+        public virtual Care Care { get; set; }
     }
 }

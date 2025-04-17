@@ -13,7 +13,8 @@ namespace AnimalCareBackend.Application.Interface
         Task<IEnumerable<CareWithAnimal>> GetAllCaresAsync();
         Task<CareWithAnimal> GetCareByIdAsync(Guid id);
         Task<Guid> AddCareAsync(CareCreateDto careDto);
-        Task<bool> UpdateCareAsync(Guid id, CareUpdateDto careDto);
+        Task<CareUpdateDto> GetCareForUpdateAsync(Guid id);
+        Task<bool> UpdateCareAsync(Guid id, CareUpdateDto careUpdateDto);
         Task<bool> DeleteCareAsync(Guid id);
         Task<List<Care>> GetByIdsAsync(IEnumerable<Guid> ids);
     }

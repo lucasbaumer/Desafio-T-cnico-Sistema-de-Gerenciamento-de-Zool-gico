@@ -25,6 +25,15 @@ namespace AnimalCareBackend.Application.Service
         {
             var careId = Guid.NewGuid();
 
+            foreach(var animalCareDto in careDto.AnimalCares ?? new List<AnimalCareDto>())
+            {
+                var animal = await _animalRepository.GetAnimalById((Guid.Parse(animalCareDto.AnimalId)));
+                if (animal == null)
+                {
+                    throw new Exception($"Animal com ID {animalCareDto.AnimalId} não encontrado!");
+                }
+            }
+
             var care = new Care
             {
                 Id = careId,
@@ -33,7 +42,7 @@ namespace AnimalCareBackend.Application.Service
                 Frequency = careDto.Frequency,
                 AnimalCares = careDto.AnimalCares.Select(ac => new AnimalCare
                 {
-                    AnimalId = ac.AnimalId,
+                    AnimalId = Guid.Parse(ac.AnimalId),
                     CareId = careId
                 }).ToList()
             };
@@ -60,8 +69,7 @@ namespace AnimalCareBackend.Application.Service
                 Frequency = care.Frequency,
                 AnimalCares = care.AnimalCares.Select(AnimalCare => new AnimalCareDto
                 {
-                    AnimalId = AnimalCare.AnimalId,
-                    AnimalName = _animalRepository.GetAnimalById(AnimalCare.AnimalId).Result.Name
+                    AnimalId = AnimalCare.AnimalId.ToString(),
                 }).ToList()
             });
 
@@ -79,7 +87,7 @@ namespace AnimalCareBackend.Application.Service
 
             if(care == null || !care.Any())
             {
-                return null;
+                throw new Exception($"Cuidado com Id {id} não encontrado!");
             }
 
             var careWithAnimal = new CareWithAnimal
@@ -98,8 +106,7 @@ namespace AnimalCareBackend.Application.Service
                 {
                     careWithAnimal.AnimalCares.Add(new AnimalCareDto
                     {
-                        AnimalId = animalCare.AnimalId,
-                        AnimalName = animal.Name,
+                        AnimalId = animalCare.AnimalId.ToString(),
                     });
                 }
             }
@@ -107,25 +114,65 @@ namespace AnimalCareBackend.Application.Service
             return careWithAnimal;
         }
 
-        public async Task<bool> UpdateCareAsync(Guid id, CareUpdateDto careDto)
+        public async Task<CareUpdateDto> GetCareForUpdateAsync(Guid id)
         {
             var existingCare = await _careRepository.GetCareByIdAsync(new List<Guid>{ id });
 
             if(existingCare == null || !existingCare.Any())
             {
-                throw new Exception("Cuidado não foi encontrado!");
+                return null;
             }
 
             var care = existingCare.First();
 
-            care.CareName = careDto.careName;
-            care.Description = careDto.Description;
-            care.Frequency = careDto.Frequency;
-            care.AnimalCares = careDto.AnimalCares;
+
+            return new CareUpdateDto
+            {
+                CareName = care.CareName,
+                Description = care.Description,
+                Frequency = care.Frequency,
+                AnimalIds = care.AnimalCares.Select(ac => ac.AnimalId.ToString()).ToArray()
+            };
+
+        }
+
+        public async Task<bool> UpdateCareAsync(Guid id, CareUpdateDto careUpdateDto)
+        {
+            var existingCare = await _careRepository.GetCareByIdAsync(new List<Guid> { id });
+
+            foreach(var animalId in careUpdateDto.AnimalIds ?? Array.Empty<String>())
+            {
+                var animal = await _animalRepository.GetAnimalById(Guid.Parse(animalId));
+                if(animal == null)
+                {
+                    throw new Exception($"animal com id: {animalId} não existe!");
+                }
+            }
+
+            if (existingCare == null || !existingCare.Any())
+            {
+                return false;
+            }
+
+            var care = existingCare.First();
+
+            care.CareName = careUpdateDto.CareName;
+            care.Description = careUpdateDto.Description;
+            care.Frequency = careUpdateDto.Frequency;
+
+            await _careRepository.RemoveAnimalByCareAsync(care.Id);
+            foreach (var animalId in careUpdateDto.AnimalIds ?? Array.Empty<String>())
+            {
+                care.AnimalCares.Add(new AnimalCare
+                {
+                    AnimalId = Guid.Parse(animalId),
+                    CareId = care.Id
+                });
+            }
+            
 
             await _careRepository.UpdateCareAsync(care);
             return true;
-
         }
     }
 }

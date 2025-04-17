@@ -14,6 +14,7 @@ namespace AnimalCareBackend.Infrastructure.Repositories
         Task AddCareAsync(Care care);
         Task UpdateCareAsync(Care care);
         Task DeleteCare(Guid id);
+        Task RemoveAnimalByCareAsync(Guid careId);
         Task<List<Care>> GetByIdsAsync(IEnumerable<Guid> ids);
     }
 }

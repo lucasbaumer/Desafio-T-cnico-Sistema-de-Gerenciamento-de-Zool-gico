@@ -14,6 +14,8 @@ import { Animal } from '../../core/models/animal.model';
 export class CareListComponent implements OnInit {
   cares: Care[] = [];
   animals: Animal[] = [];
+  loading: boolean = true;
+  showAlert: boolean = false;
 
   constructor(
     private careService: CareService,
@@ -29,8 +31,14 @@ export class CareListComponent implements OnInit {
   loadCares(): void {
     this.careService.getAllCares().subscribe({
       next: (data) => {
-        console.log("dados: ", data);
         this.cares = data;
+        this.loading = false;
+
+        setTimeout(()=> {
+          if(this.cares.length === 0){
+            this.showAlert = true;
+          }
+        },500)
       },
       error: (err) => {
         console.error('Erro ao carregar cuidados', err);
@@ -41,8 +49,8 @@ export class CareListComponent implements OnInit {
   loadAnimals(): void {
     this.animalService.getAllAnimals().subscribe({
       next: (data) => {
-        console.log("dados: ", data);
         this.animals = data;
+        console.log("Animais carregados:", this.animals);
       },
       error: (err) => {
         console.error('Erro ao carregar animais', err);

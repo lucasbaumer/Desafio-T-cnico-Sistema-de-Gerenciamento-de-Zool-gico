@@ -26,12 +26,28 @@ namespace AnimalCareBackend.Infrastructure.Repositories
 
         public async Task DeleteCare(Guid id)
         {
-            var care = await _context.Cares.FindAsync(id);
-            if(care != null)
+            var care = await _context.Cares.Include(c => c.AnimalCares).FirstOrDefaultAsync(c => c.Id == id);
+            if(care == null)
             {
-                 _context.Cares.Remove(care);
-                await _context.SaveChangesAsync();
+                throw new Exception($"Não foi possivel encontrar o animal com id: {id}");
             }
+
+            if (care.AnimalCares.Any())
+            {
+                throw new Exception("Não é possivel excluir o cuidado pois está associado a um ou mais animais");
+            }
+            _context.Cares.Remove(care);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveAnimalByCareAsync(Guid careId)
+        {
+            var existingAnimalCares = await _context.AnimalCares
+                .Where(ac => ac.CareId == careId)
+                .ToListAsync();
+
+            _context.AnimalCares.RemoveRange(existingAnimalCares);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Care>> GetAllCaresAsync()

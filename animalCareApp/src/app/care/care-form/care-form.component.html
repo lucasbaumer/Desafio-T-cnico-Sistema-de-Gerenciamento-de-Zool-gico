@@ -30,10 +30,9 @@
     <label>
       <input
         type="checkbox"
-        [(ngModel)]="care.animalIds"
-        [value]="animal.id"
-        (change)="onAnimalSelect($event)"
-        name="animalIds">
+        [checked]="care.animalIds.includes(animal.id)"
+        (change)="onAnimalSelect(animal.id, $event)"
+        name="animalIds{{animal.id}}">
       {{ animal.name }}
     </label>
   </div>

@@ -48,11 +48,29 @@ namespace AnimalCareBackend.Presentation.Controllers
             try
             {
                 await _careService.AddCareAsync(careCreateDto);
-                return Ok("Cuidado foi cadastrado com sucesso!");
+                return Ok(new { Message = "Cuidado foi cadastrado com sucesso!" });
             }
             catch (Exception ex)
             {
                 return BadRequest($"Erro: {ex.Message}");
+            }
+        }
+
+        [HttpGet("edit/{id}")]
+        public async Task<ActionResult<CareUpdateDto>> getCareForEdit(Guid id)
+        {
+            try
+            {
+                var result = await _careService.GetCareForUpdateAsync(id);
+               if(result == null)
+                {
+                    return NotFound("cuidado não foi encontrado!");
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = $"Erro ao cadastrar o cuidado: {ex.Message}" });
             }
         }
 
@@ -62,13 +80,18 @@ namespace AnimalCareBackend.Presentation.Controllers
             try
             {
                 var result = await _careService.UpdateCareAsync(id, careUpdateDto);
-                return result ? Ok("Cuidado atualizado com sucesso!") : BadRequest("Erro ao atualizar cadastro!");
+                if (!result)
+                {
+                    return NotFound(new { Message = "Cuidado não foi encontrado!" });
+                }
+                return Ok(new { Message = "Cuidado foi adicionado com sucesso!"});
             }
             catch (Exception ex)
             {
-                return BadRequest($"Erro: {ex.Message}");
+                return BadRequest(new { Message = $"Erro ao cadastrar o cuidado: {ex.Message}" });
             }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCare(Guid id)

@@ -3,8 +3,12 @@
   <button (click)="goToCreate()" class="back-to-list-btn">Voltar para Listagem</button>
 </div>
 
-<div *ngIf="formError" class="alert">
+<div *ngIf="formError" class="alert error-alert">
   {{ formError }}
+</div>
+
+<div *ngIf="successMessage" class="alert success-alert">
+  {{ successMessage }}
 </div>
 
 <form #careForm="ngForm" (ngSubmit)="onSubmit()">

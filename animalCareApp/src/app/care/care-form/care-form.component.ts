@@ -23,6 +23,7 @@ export class CareFormComponent implements OnInit {
 
   animals: Animal[] = [];
   formError: string = '';
+  successMessage: string = '';
   isEditMode: boolean = false;
   formSubmitted: boolean = false;
 
@@ -73,6 +74,8 @@ export class CareFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.successMessage = '';
+    this.formError = '';
     this.formSubmitted = true;
 
     if (
@@ -99,7 +102,7 @@ export class CareFormComponent implements OnInit {
     if (this.isEditMode) {
       this.careService.updateCare(this.care.id, careToSend).subscribe({
         next: () => {
-          this.formError = 'Cuidado atualizado com sucesso!';
+          this.successMessage = 'Cuidado atualizado com sucesso!';
           setTimeout(() => {
             this.router.navigate(['/care']);
           }, 2000);
@@ -112,7 +115,7 @@ export class CareFormComponent implements OnInit {
     } else {
       this.careService.createCare(careToSend).subscribe({
         next: () => {
-          this.formError = 'Cuidado cadastrado com sucesso!';
+          this.successMessage = 'Cuidado cadastrado com sucesso!';
           setTimeout(() => {
             this.router.navigate(['/care']);
           }, 2000);

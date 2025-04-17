@@ -22,7 +22,7 @@ export class AnimalFormComponent {
   }
 
   formError: string = '';
-  isSuccess: boolean = false;
+  successMessage: string = '';
 
   constructor(
     private animalService: AnimalService,
@@ -70,6 +70,8 @@ export class AnimalFormComponent {
   }
 
   onSubmit() {
+    this.successMessage = '';
+    this.formError = '';
     const birth = new Date(this.animal.birthDate);
 
     if (!this.animal.name || !this.animal.description || !this.animal.species || !this.animal.habitat || !this.animal.countryOfOrigin) {
@@ -112,8 +114,7 @@ export class AnimalFormComponent {
 
     request.subscribe({
       next: (data) => {
-        this.formError = 'Animal salvo com sucesso!';
-        this.isSuccess = true;
+        this.successMessage = 'Animal salvo com sucesso!';
         setTimeout(() => this.router.navigate(['/animals']), 3000);
       },
       error: (err) => {

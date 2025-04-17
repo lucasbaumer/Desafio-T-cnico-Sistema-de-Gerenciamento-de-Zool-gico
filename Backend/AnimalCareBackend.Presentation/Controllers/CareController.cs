@@ -26,7 +26,7 @@ namespace AnimalCareBackend.Presentation.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest($"Erro: {ex.Message}");
+                return BadRequest(new { Message = $"Erro: {ex.Message}" });
             }
         }
 
@@ -36,7 +36,7 @@ namespace AnimalCareBackend.Presentation.Controllers
             var care = await _careService.GetCareByIdAsync(id);
             if (care == null)
             {
-                return NotFound("Não foi possível encontrar o cuidado!");
+                return NotFound(new { Message = "Não foi possível encontrar o cuidado!" });
             }
 
             return Ok(care);
@@ -64,7 +64,7 @@ namespace AnimalCareBackend.Presentation.Controllers
                 var result = await _careService.GetCareForUpdateAsync(id);
                if(result == null)
                 {
-                    return NotFound("cuidado não foi encontrado!");
+                    return NotFound(new { Message = "Cuidado não foi encontrado!" });
                 }
                 return Ok(result);
             }
@@ -99,10 +99,10 @@ namespace AnimalCareBackend.Presentation.Controllers
             var result = await _careService.DeleteCareAsync(id);
             if (result)
             {
-                return Ok("Cuidado foi deletado com sucesso!");
+                return Ok(new { Message = "Cuidado foi excluido com sucesso!" });
             }
 
-            return BadRequest("Erro ao deletar Cuidado!");
+            return BadRequest(new { Message = "erro ao excluir cuidado!" });
         }
     }
 }

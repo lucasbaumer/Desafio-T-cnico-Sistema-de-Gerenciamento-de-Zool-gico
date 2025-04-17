@@ -31,7 +31,7 @@ namespace AnimalCareBackend.Presentation.Controllers
             var animal = await _animalService.GetByIdAsync(id);
             if (animal == null)
             {
-                return NotFound();
+                return NotFound((new { Message = $"Erro ao encontrar o animal com a id: {id}" }));
             }
 
             return Ok(animal);
@@ -57,7 +57,7 @@ namespace AnimalCareBackend.Presentation.Controllers
             try
             {
                 var result = await _animalService.UpdateAnimal(id, animalUpdateDto);
-                return result ? Ok(new { Message = "Animal foi ataulizado com sucesso!" }) : BadRequest(new { Message = "Erro ao ataulizar o animal" });
+                return result ? Ok(new { Message = "Animal foi atualizado com sucesso!" }) : BadRequest(new { Message = "Erro ao atualizar o animal" });
             }
             catch (Exception ex)
             {
@@ -71,10 +71,10 @@ namespace AnimalCareBackend.Presentation.Controllers
             var result = await _animalService.DeleteAnimal(id);
             if (result)
             {
-                return Ok("Animal excluído com sucesso!");
+                return Ok(new { Message = "Animal foi excluído com sucesso!" });
             }
 
-            return BadRequest("Erro ao deletar animal");
+            return BadRequest(new { Message = "Erro ao deletar o animal" });
         }
 
     }

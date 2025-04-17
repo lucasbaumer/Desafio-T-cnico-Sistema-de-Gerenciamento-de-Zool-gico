@@ -36,9 +36,6 @@
       {{ animal.name }}
     </label>
   </div>
-  <div *ngIf="care.animalIds.length === 0 && careForm.touched" class="error-message">
-    Selecione pelo menos um animal.
-  </div>
 
   <button type="submit">Salvar</button>
 </form>

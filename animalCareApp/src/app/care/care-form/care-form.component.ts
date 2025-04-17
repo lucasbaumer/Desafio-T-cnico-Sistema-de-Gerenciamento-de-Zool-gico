@@ -78,11 +78,9 @@ export class CareFormComponent implements OnInit {
     if (
       !this.care.careName ||
       !this.care.description ||
-      !this.care.frequency ||
-      !Array.isArray(this.care.animalIds) ||
-      this.care.animalIds.length === 0
+      !this.care.frequency
     ) {
-      this.formError = 'Por favor, preencha todos os campos obrigatórios e selecione pelo menos um animal.';
+      this.formError = 'Por favor, preencha todos os campos obrigatórios';
       return;
     }
 
